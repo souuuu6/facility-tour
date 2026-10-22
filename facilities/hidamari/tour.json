@@ -1,0 +1,418 @@
+{
+  "version": 1,
+  "name": "ひだまり保育園",
+  "sample": true,
+  "accent": "#e08a4f",
+  "start": "entrance",
+  "credit": "写真は Poly Haven の CC0 素材（各部屋）と、プログラムで描いた仮の部屋（ろうか）です。",
+  "logo": "logo.svg",
+  "tagline": "0〜5歳の子どもたちが、のびのび過ごす小さな保育園です。",
+  "share": {
+    "node": "room0",
+    "yaw": 40,
+    "pitch": -4
+  },
+  "languages": [
+    "en"
+  ],
+  "noindex": true,
+  "info": {
+    "title": "はじめての方へ",
+    "hours": [
+      [
+        "開園時間",
+        "平日 7:00〜19:00／土曜 7:00〜18:00"
+      ],
+      [
+        "見学の受付",
+        "平日 10:00〜16:00"
+      ]
+    ],
+    "closed": "日曜・祝日・年末年始",
+    "bring": [
+      "上ばき（大人の方）",
+      "母子健康手帳（入園のご相談のとき）"
+    ],
+    "steps": [
+      "見学の予約（ネットか電話）",
+      "園内の見学（30分ほど）",
+      "入園のご相談",
+      "お住まいの市区町村への申し込み"
+    ],
+    "note": "見学はお子さん連れでも大丈夫です。",
+    "updated": "2026年10月"
+  },
+  "contact": {
+    "reserve": {
+      "label": "見学を予約する",
+      "url": "https://example.com/reserve",
+      "note": "平日 10:00〜16:00 で受け付けています"
+    },
+    "tel": "000-0000-0000",
+    "hours": "平日 9:00〜17:00",
+    "map": "https://example.com/map",
+    "address": "（サンプルの住所）",
+    "web": "https://example.com/"
+  },
+  "analytics": {
+    "ga4": ""
+  },
+  "guide": [
+    {
+      "node": "entrance",
+      "look": [
+        5,
+        0
+      ],
+      "text": "ひだまり保育園へようこそ。玄関から、園の中をご案内します。"
+    },
+    {
+      "node": "entrance",
+      "look": [
+        -105,
+        -4
+      ],
+      "text": "左手は事務室です。入園や見学のご相談は、こちらで伺います。"
+    },
+    {
+      "node": "hall1",
+      "look": [
+        0,
+        -6
+      ],
+      "text": "ろうかを進みます。左右に子どもたちのお部屋が並んでいます。"
+    },
+    {
+      "node": "room0",
+      "look": [
+        40,
+        0
+      ],
+      "text": "0歳児のお部屋です。大きな窓から、やわらかい光が入ります。"
+    },
+    {
+      "node": "room0",
+      "look": [
+        95,
+        -10
+      ],
+      "text": "はいはいや、つかまり立ちの時期に合わせて、やわらかい遊具を置いています。"
+    },
+    {
+      "node": "room12",
+      "look": [
+        30,
+        8
+      ],
+      "text": "1〜2歳児のお部屋です。ボールやマットを使って、体を動かして遊びます。"
+    },
+    {
+      "node": "kitchen",
+      "look": [
+        150,
+        -4
+      ],
+      "text": "給食とおやつは、園内の給食室で作っています。"
+    },
+    {
+      "node": "garden",
+      "look": [
+        -100,
+        -3
+      ],
+      "text": "園庭です。すべり台や、すなばがあります。"
+    },
+    {
+      "node": "garden",
+      "look": [
+        40,
+        -12
+      ],
+      "text": "ご覧いただきありがとうございました。見学のご予約は「問い合わせ」からどうぞ。"
+    }
+  ],
+  "floorplan": {
+    "image": "floorplan.svg",
+    "width": 680,
+    "height": 840
+  },
+  "nodes": [
+    {
+      "id": "entrance",
+      "name": "玄関",
+      "room": "玄関",
+      "image": "panos/entrance.jpg",
+      "preview": "panos/entrance_s.jpg",
+      "map": {
+        "x": 328,
+        "y": 720
+      },
+      "heading": -115,
+      "startYaw": 115,
+      "links": [
+        {
+          "to": "hall1",
+          "yaw": 115,
+          "pitch": -26
+        }
+      ],
+      "pins": [
+        {
+          "yaw": 5,
+          "pitch": 2,
+          "title": "出入口",
+          "text": "送り迎えはこちらの扉から。インターホンで職員がお名前を確かめてから扉を開けます。",
+          "image": "photos/entrance-door.jpg"
+        },
+        {
+          "yaw": -105,
+          "pitch": -4,
+          "title": "事務室",
+          "text": "書類の受け取りや、入園のご相談はこちらで伺います。見学のご予約はお電話でどうぞ。"
+        },
+        {
+          "yaw": 80,
+          "pitch": 6,
+          "title": "送迎の車について",
+          "text": "窓の外が送迎用のスペースです。車は決められた場所にとめて、エンジンを切ってお待ちください。"
+        }
+      ]
+    },
+    {
+      "id": "hall1",
+      "name": "ろうか（玄関側）",
+      "image": "panos/hall1.jpg",
+      "preview": "panos/hall1_s.jpg",
+      "map": {
+        "x": 328,
+        "y": 560
+      },
+      "heading": 0,
+      "startYaw": 0,
+      "links": [
+        {
+          "to": "entrance",
+          "yaw": 180.0,
+          "pitch": -39.5
+        },
+        {
+          "to": "hall2",
+          "yaw": 0.0,
+          "pitch": -30.3
+        },
+        {
+          "to": "kitchen",
+          "yaw": -116.6,
+          "pitch": -50.8
+        },
+        {
+          "to": "room0",
+          "yaw": 63.4,
+          "pitch": -50.8
+        }
+      ],
+      "pins": []
+    },
+    {
+      "id": "hall2",
+      "name": "ろうか（園庭側）",
+      "image": "panos/hall2.jpg",
+      "preview": "panos/hall2_s.jpg",
+      "map": {
+        "x": 328,
+        "y": 440
+      },
+      "heading": 0,
+      "startYaw": 0,
+      "links": [
+        {
+          "to": "hall1",
+          "yaw": 180.0,
+          "pitch": -30.3
+        },
+        {
+          "to": "room12",
+          "yaw": -71.6,
+          "pitch": -52.5
+        },
+        {
+          "to": "garden",
+          "yaw": 0.0,
+          "pitch": -30.3
+        }
+      ],
+      "pins": [
+        {
+          "yaw": 40.6,
+          "pitch": 18.0,
+          "title": "トイレ",
+          "text": "子ども用の小さな便器と、おむつ替えの台があります。トイレトレーニングは、ご家庭と相談しながら進めます。"
+        }
+      ]
+    },
+    {
+      "id": "room0",
+      "name": "0歳児のお部屋",
+      "room": "0歳児のお部屋",
+      "image": "panos/room0.jpg",
+      "preview": "panos/room0_s.jpg",
+      "map": {
+        "x": 496,
+        "y": 560
+      },
+      "heading": 153,
+      "startYaw": 40,
+      "links": [
+        {
+          "to": "hall1",
+          "yaw": 128,
+          "pitch": -24
+        }
+      ],
+      "pins": [
+        {
+          "yaw": 95,
+          "pitch": -10,
+          "title": "やわらかい遊具",
+          "text": "はいはいや、つかまり立ちの時期に合わせて、やわらかいマットと遊具を置いています。",
+          "image": "photos/room0-toys.jpg"
+        },
+        {
+          "yaw": 40,
+          "pitch": 4,
+          "title": "大きな窓",
+          "text": "午前中は日がよく入ります。まぶしいときや、お昼寝の時間はカーテンで明るさを調整します。"
+        },
+        {
+          "yaw": -160,
+          "pitch": -14,
+          "title": "食事のテーブル",
+          "text": "離乳食は月齢と一人ひとりの様子に合わせて進めます。食べ方で気になることは、いつでもご相談ください。"
+        }
+      ]
+    },
+    {
+      "id": "room12",
+      "name": "1〜2歳児のお部屋",
+      "room": "1〜2歳児のお部屋",
+      "image": "panos/room12.jpg",
+      "preview": "panos/room12_s.jpg",
+      "map": {
+        "x": 160,
+        "y": 420
+      },
+      "heading": -25,
+      "startYaw": 30,
+      "links": [
+        {
+          "to": "hall2",
+          "yaw": 117,
+          "pitch": -24
+        }
+      ],
+      "pins": [
+        {
+          "yaw": 30,
+          "pitch": 14,
+          "title": "からだを動かす遊び",
+          "text": "ボールやマットを使って、ころがる・のぼる・くぐるなどの遊びをします。",
+          "image": "photos/room12-balls.jpg"
+        },
+        {
+          "yaw": -60,
+          "pitch": 12,
+          "title": "明るい窓",
+          "text": "大きな窓から光が入ります。窓には落下を防ぐ柵をつけています。"
+        },
+        {
+          "yaw": -150,
+          "pitch": -4,
+          "title": "大きな鏡",
+          "text": "鏡の前で、着がえや手遊びをします。自分の姿を見るのが好きな時期です。"
+        }
+      ]
+    },
+    {
+      "id": "kitchen",
+      "name": "給食室・ランチルーム",
+      "room": "給食室",
+      "image": "panos/kitchen.jpg",
+      "preview": "panos/kitchen_s.jpg",
+      "map": {
+        "x": 160,
+        "y": 592
+      },
+      "heading": 159,
+      "startYaw": 145,
+      "links": [
+        {
+          "to": "hall1",
+          "yaw": -73,
+          "pitch": -26
+        }
+      ],
+      "pins": [
+        {
+          "yaw": 145,
+          "pitch": -2,
+          "title": "調理スペース",
+          "text": "給食とおやつは園内で作っています。食物アレルギーについては、入園前の面談でご相談ください。",
+          "image": "photos/kitchen.jpg"
+        },
+        {
+          "yaw": -160,
+          "pitch": -12,
+          "title": "配膳カウンター",
+          "text": "できあがった給食は、ここから各お部屋へ運びます。"
+        },
+        {
+          "yaw": -38,
+          "pitch": 2,
+          "title": "テラス",
+          "text": "天気のよい日は、テラスでおやつを食べることもあります。"
+        }
+      ]
+    },
+    {
+      "id": "garden",
+      "name": "園庭",
+      "room": "園庭",
+      "image": "panos/garden.jpg",
+      "preview": "panos/garden_s.jpg",
+      "map": {
+        "x": 328,
+        "y": 180
+      },
+      "heading": -15,
+      "startYaw": -100,
+      "links": [
+        {
+          "to": "hall2",
+          "yaw": -165,
+          "pitch": -28
+        }
+      ],
+      "pins": [
+        {
+          "yaw": -100,
+          "pitch": -3,
+          "title": "すべり台",
+          "text": "小さな子でも上りやすい、低めのすべり台です。",
+          "image": "photos/garden-slide.jpg"
+        },
+        {
+          "yaw": -76,
+          "pitch": -6,
+          "title": "すなば",
+          "text": "すなばは毎朝、職員が見回ってから使います。使わないときはシートをかけています。"
+        },
+        {
+          "yaw": 40,
+          "pitch": -20,
+          "title": "しばふの広場",
+          "text": "かけっこやボール遊びができる広さがあります。夏は日よけを張ります。"
+        }
+      ]
+    }
+  ]
+}

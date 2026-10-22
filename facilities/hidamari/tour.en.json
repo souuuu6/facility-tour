@@ -1,0 +1,80 @@
+{
+  "name": "Hidamari Nursery School",
+  "tagline": "A small nursery school where children aged 0 to 5 can spend their days at their own pace.",
+  "credit": "Photos are Poly Haven CC0 images (rooms) and computer-drawn placeholder rooms (corridor).",
+  "contact": {
+    "title": "Contact & visit booking",
+    "reserve": { "label": "Book a visit", "note": "We take bookings on weekdays, 10:00–16:00" },
+    "hours": "Weekdays 9:00–17:00",
+    "address": "(sample address)"
+  },
+  "info": {
+    "title": "First visit",
+    "hours": [["Open", "Weekdays 7:00–19:00 / Saturdays 7:00–18:00"], ["Visits", "Weekdays 10:00–16:00"]],
+    "closed": "Sundays, national holidays and the New Year period",
+    "bring": ["Indoor shoes (for adults)", "Maternal and child health handbook (when discussing enrollment)"],
+    "steps": ["Book a visit (online or by phone)", "Tour of the school (about 30 minutes)", "Talk with us about enrollment", "Apply at your city or ward office"],
+    "note": "You are welcome to bring your child to the visit.",
+    "updated": "October 2026"
+  },
+  "guide": [
+    "Welcome to Hidamari Nursery School. Let us show you around, starting from the entrance.",
+    "On the left is the office. We can talk about enrollment and visits here.",
+    "We walk down the corridor. The children's rooms are on both sides.",
+    "This is the room for 0-year-olds. Soft light comes in through the large windows.",
+    "We have soft play equipment suited to babies who are crawling or starting to stand.",
+    "This is the room for 1- and 2-year-olds. Children play with balls and mats and move their bodies.",
+    "Lunch and snacks are cooked in our own kitchen.",
+    "This is the garden, with a slide and a sandbox.",
+    "Thank you for visiting. To book a visit, tap “Contact”."
+  ],
+  "nodes": {
+    "entrance": {
+      "name": "Entrance", "room": "Entrance",
+      "pins": [
+        { "title": "Front door", "text": "Please use this door for drop-off and pick-up. A staff member checks your name on the intercom before opening the door." },
+        { "title": "Office", "text": "We handle paperwork and questions about enrollment here. Please call us to book a visit." },
+        { "title": "Cars for drop-off", "text": "The area outside the window is for drop-off. Please park in the marked spaces and turn off your engine while you wait." }
+      ]
+    },
+    "hall1": { "name": "Corridor (entrance side)" },
+    "hall2": {
+      "name": "Corridor (garden side)",
+      "pins": [
+        { "title": "Toilets", "text": "There are small toilets for children and a diaper-changing table. We work on toilet training together with each family." }
+      ]
+    },
+    "room0": {
+      "name": "Room for 0-year-olds", "room": "Room for 0-year-olds",
+      "pins": [
+        { "title": "Soft play equipment", "text": "Soft mats and play equipment suited to babies who are crawling or starting to stand." },
+        { "title": "Large windows", "text": "The sun comes in well in the morning. We use the curtains to adjust the light when it is too bright or at nap time." },
+        { "title": "Dining table", "text": "Baby food is introduced at each child's own pace and age. Please feel free to ask us about eating." }
+      ]
+    },
+    "room12": {
+      "name": "Room for 1–2-year-olds", "room": "Room for 1–2-year-olds",
+      "pins": [
+        { "title": "Active play", "text": "Children roll, climb and crawl through things using balls and mats." },
+        { "title": "Bright windows", "text": "Light comes in through the large windows. The windows have guards to prevent falls." },
+        { "title": "Large mirror", "text": "Children change clothes and do hand games in front of the mirror. They enjoy seeing themselves at this age." }
+      ]
+    },
+    "kitchen": {
+      "name": "Kitchen & lunch room", "room": "Kitchen",
+      "pins": [
+        { "title": "Cooking area", "text": "Lunch and snacks are made here at the school. Please tell us about food allergies at the pre-enrollment interview." },
+        { "title": "Serving counter", "text": "Meals are carried from here to each room." },
+        { "title": "Terrace", "text": "On nice days, children sometimes have their snack on the terrace." }
+      ]
+    },
+    "garden": {
+      "name": "Garden", "room": "Garden",
+      "pins": [
+        { "title": "Slide", "text": "A low slide that small children can climb easily." },
+        { "title": "Sandbox", "text": "Staff check the sandbox every morning before use. It is covered when not in use." },
+        { "title": "Lawn", "text": "There is room to run and play ball. We put up shade in summer." }
+      ]
+    }
+  }
+}

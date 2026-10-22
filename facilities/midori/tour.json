@@ -1,0 +1,433 @@
+{
+  "version": 1,
+  "name": "みどりこどもクリニック",
+  "sample": true,
+  "accent": "#2f9e83",
+  "start": "entrance",
+  "credit": "写真は Poly Haven の CC0 素材（入口・待合室・診察室・処置室）と、プログラムで描いた仮の部屋（受付・ろうか）です。",
+  "logo": "logo.svg",
+  "tagline": "こどもの「いつもと違う」に、ていねいに向き合う小児科です。",
+  "share": {
+    "node": "waiting",
+    "yaw": -115,
+    "pitch": -8
+  },
+  "languages": [
+    "en"
+  ],
+  "noindex": true,
+  "info": {
+    "title": "はじめての方へ",
+    "hours": [
+      [
+        "月・火・木・金",
+        "9:00〜12:00／15:00〜18:00"
+      ],
+      [
+        "土",
+        "9:00〜12:00"
+      ]
+    ],
+    "closed": "水曜・日曜・祝日",
+    "bring": [
+      "保険証（マイナ保険証）",
+      "医療証（お持ちの方）",
+      "母子健康手帳",
+      "お薬手帳（お持ちの方）"
+    ],
+    "steps": [
+      "ネットか電話で予約",
+      "受付で問診票を記入",
+      "診察",
+      "お会計・お薬の説明"
+    ],
+    "note": "熱やせきなどの症状がある方は、来院の前にお電話でお知らせください。",
+    "updated": "2026年10月"
+  },
+  "contact": {
+    "reserve": {
+      "label": "診察を予約する",
+      "url": "https://example.com/reserve",
+      "note": "ネット予約は24時間受け付けています"
+    },
+    "tel": "000-0000-0000",
+    "hours": "診療時間内",
+    "map": "https://example.com/map",
+    "address": "（サンプルの住所）",
+    "web": "https://example.com/"
+  },
+  "analytics": {
+    "ga4": ""
+  },
+  "guide": [
+    {
+      "node": "entrance",
+      "look": [
+        -165,
+        -5
+      ],
+      "text": "みどりこどもクリニックへようこそ。入口から院内をご案内します。"
+    },
+    {
+      "node": "entrance",
+      "look": [
+        100,
+        -20
+      ],
+      "text": "入口の横に、ベビーカー置き場があります。"
+    },
+    {
+      "node": "reception",
+      "look": [
+        0,
+        -3
+      ],
+      "text": "受付です。はじめての方は、保険証と、お持ちの方は医療証・母子健康手帳をお出しください。"
+    },
+    {
+      "node": "waiting",
+      "look": [
+        -125,
+        -15
+      ],
+      "text": "待合室です。ベビーカーのままお待ちいただけます。"
+    },
+    {
+      "node": "waiting",
+      "look": [
+        -165,
+        -8
+      ],
+      "text": "熱やせきなどの症状がある方は、来院の前にお電話でお知らせください。"
+    },
+    {
+      "node": "hall2",
+      "look": [
+        0,
+        -6
+      ],
+      "text": "受付の奥のろうかを進むと、診察室があります。"
+    },
+    {
+      "node": "exam1",
+      "look": [
+        100,
+        -15
+      ],
+      "text": "診察室です。保護者の方がそばにいる状態で診察します。"
+    },
+    {
+      "node": "rest",
+      "look": [
+        70,
+        -15
+      ],
+      "text": "処置室・休養室です。点滴のときなどに、横になって休めます。"
+    },
+    {
+      "node": "rest",
+      "look": [
+        10,
+        0
+      ],
+      "text": "ご覧いただきありがとうございました。ご予約・お問い合わせは「問い合わせ」からどうぞ。"
+    }
+  ],
+  "floorplan": {
+    "image": "floorplan.svg",
+    "width": 840,
+    "height": 940
+  },
+  "nodes": [
+    {
+      "id": "entrance",
+      "name": "入口",
+      "room": "入口",
+      "image": "panos/entrance.jpg",
+      "preview": "panos/entrance_s.jpg",
+      "map": {
+        "x": 460,
+        "y": 852
+      },
+      "heading": 165,
+      "startYaw": -165,
+      "links": [
+        {
+          "to": "reception",
+          "yaw": -165,
+          "pitch": -27
+        }
+      ],
+      "pins": [
+        {
+          "yaw": -20,
+          "pitch": 2,
+          "title": "出入口",
+          "text": "段差のない入口です。ベビーカーのまま入れます。"
+        },
+        {
+          "yaw": 100,
+          "pitch": -24,
+          "title": "ベビーカー置き場",
+          "text": "入口の横に、ベビーカーを置ける場所があります。"
+        }
+      ]
+    },
+    {
+      "id": "reception",
+      "name": "受付",
+      "room": "受付",
+      "image": "panos/reception.jpg",
+      "preview": "panos/reception_s.jpg",
+      "map": {
+        "x": 460,
+        "y": 700
+      },
+      "heading": 0,
+      "startYaw": 0,
+      "links": [
+        {
+          "to": "hall1",
+          "yaw": 43.0,
+          "pitch": -30.3
+        },
+        {
+          "to": "waiting",
+          "yaw": -82.9,
+          "pitch": -30.3
+        },
+        {
+          "to": "entrance",
+          "yaw": 180.0,
+          "pitch": -39.5
+        }
+      ],
+      "pins": [
+        {
+          "yaw": 0.0,
+          "pitch": -3.7,
+          "title": "受付",
+          "text": "はじめての方は、保険証（マイナ保険証）と、お持ちの方は医療証・母子健康手帳をお出しください。問診票はこちらでお渡しします。",
+          "image": "photos/reception.jpg"
+        }
+      ]
+    },
+    {
+      "id": "waiting",
+      "name": "待合室",
+      "room": "待合室",
+      "image": "panos/waiting.jpg",
+      "preview": "panos/waiting_s.jpg",
+      "map": {
+        "x": 160,
+        "y": 680
+      },
+      "heading": 75,
+      "startYaw": 15,
+      "links": [
+        {
+          "to": "reception",
+          "yaw": 15,
+          "pitch": -25
+        }
+      ],
+      "pins": [
+        {
+          "yaw": -125,
+          "pitch": -20,
+          "title": "ゆったりした待合",
+          "text": "ベビーカーのままお待ちいただけるよう、通路を広めにとっています。",
+          "image": "photos/waiting.jpg"
+        },
+        {
+          "yaw": -165,
+          "pitch": -8,
+          "title": "発熱などの症状がある方へ",
+          "text": "熱やせきなどの症状がある場合は、来院の前にお電話でお知らせください。別のお部屋にご案内することがあります。"
+        },
+        {
+          "yaw": 36,
+          "pitch": 1,
+          "title": "呼び出しの表示",
+          "text": "順番が近づくと、画面に番号を表示してお知らせします。"
+        }
+      ]
+    },
+    {
+      "id": "hall1",
+      "name": "ろうか（受付側）",
+      "image": "panos/hall1.jpg",
+      "preview": "panos/hall1_s.jpg",
+      "map": {
+        "x": 572,
+        "y": 520
+      },
+      "heading": 0,
+      "startYaw": 0,
+      "links": [
+        {
+          "to": "reception",
+          "yaw": 180.0,
+          "pitch": -47.7
+        },
+        {
+          "to": "hall2",
+          "yaw": 0.0,
+          "pitch": -33.4
+        }
+      ],
+      "pins": [
+        {
+          "yaw": -50.2,
+          "pitch": 21.0,
+          "title": "トイレ",
+          "text": "おむつ替えの台と、子ども用の便座があります。"
+        }
+      ]
+    },
+    {
+      "id": "hall2",
+      "name": "ろうか（中ほど）",
+      "image": "panos/hall2.jpg",
+      "preview": "panos/hall2_s.jpg",
+      "map": {
+        "x": 572,
+        "y": 420
+      },
+      "heading": 0,
+      "startYaw": 0,
+      "links": [
+        {
+          "to": "hall1",
+          "yaw": 180.0,
+          "pitch": -33.4
+        },
+        {
+          "to": "hall3",
+          "yaw": 0.0,
+          "pitch": -33.4
+        },
+        {
+          "to": "rest",
+          "yaw": 90.0,
+          "pitch": -53.9
+        }
+      ],
+      "pins": []
+    },
+    {
+      "id": "hall3",
+      "name": "ろうか（診察室側）",
+      "image": "panos/hall3.jpg",
+      "preview": "panos/hall3_s.jpg",
+      "map": {
+        "x": 572,
+        "y": 320
+      },
+      "heading": 0,
+      "startYaw": 0,
+      "links": [
+        {
+          "to": "hall2",
+          "yaw": 180.0,
+          "pitch": -33.4
+        },
+        {
+          "to": "exam1",
+          "yaw": 0.0,
+          "pitch": -33.4
+        }
+      ],
+      "pins": [
+        {
+          "yaw": -90.0,
+          "pitch": 26.6,
+          "title": "診察室2",
+          "text": "混み合う日は、こちらのお部屋でも診察します。"
+        }
+      ]
+    },
+    {
+      "id": "exam1",
+      "name": "診察室1",
+      "room": "診察室",
+      "image": "panos/exam1.jpg",
+      "preview": "panos/exam1_s.jpg",
+      "map": {
+        "x": 572,
+        "y": 120
+      },
+      "heading": 140,
+      "startYaw": 100,
+      "links": [
+        {
+          "to": "hall3",
+          "yaw": 40,
+          "pitch": -27
+        }
+      ],
+      "pins": [
+        {
+          "yaw": 100,
+          "pitch": -15,
+          "title": "診察用ベッド",
+          "text": "診察は保護者の方がそばにいる状態で行います。お子さんが不安なときは、ひざの上での診察もご相談ください。",
+          "image": "photos/exam-bed.jpg"
+        },
+        {
+          "yaw": -55,
+          "pitch": -3,
+          "title": "医療用の設備",
+          "text": "吸入などに使う設備です。使うときは、何をするのかをお子さんにも説明します。"
+        },
+        {
+          "yaw": -140,
+          "pitch": 12,
+          "title": "モニター",
+          "text": "検査の結果や画像を、保護者の方と一緒に見ながら説明します。"
+        }
+      ]
+    },
+    {
+      "id": "rest",
+      "name": "処置室・休養室",
+      "room": "処置室・休養室",
+      "image": "panos/rest.jpg",
+      "preview": "panos/rest_s.jpg",
+      "map": {
+        "x": 720,
+        "y": 412
+      },
+      "heading": -35,
+      "startYaw": 60,
+      "links": [
+        {
+          "to": "hall2",
+          "yaw": -60,
+          "pitch": -30
+        }
+      ],
+      "pins": [
+        {
+          "yaw": 70,
+          "pitch": -15,
+          "title": "休養用ベッド",
+          "text": "点滴のときや、体調がすぐれないときに横になって休めます。保護者の方も付き添えます。",
+          "image": "photos/rest-bed.jpg"
+        },
+        {
+          "yaw": 85,
+          "pitch": -50,
+          "title": "やわらかいマット",
+          "text": "小さなお子さんが床で遊べるよう、やわらかいマットを敷いています。"
+        },
+        {
+          "yaw": 10,
+          "pitch": 4,
+          "title": "かべの絵",
+          "text": "こわくならないよう、やさしい色の絵をかざっています。"
+        }
+      ]
+    }
+  ]
+}

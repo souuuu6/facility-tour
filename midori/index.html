@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="tour-facility" content="midori">
+  <base href="../">
+  <meta name="description" content="こどもの「いつもと違う」に、ていねいに向き合う小児科です。">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="みどりこどもクリニック｜360°バーチャル見学（サンプル）">
+  <meta property="og:description" content="こどもの「いつもと違う」に、ていねいに向き合う小児科です。">
+  <meta property="og:url" content="https://souuuu6.github.io/facility-tour/midori/">
+  <meta property="og:site_name" content="みどりこどもクリニック">
+  <meta property="og:locale" content="ja_JP">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:image" content="https://souuuu6.github.io/facility-tour/facilities/midori/share.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://souuuu6.github.io/facility-tour/facilities/midori/share.jpg">
+  <meta name="robots" content="noindex">
+  <!-- 読み込んでよい先（自分のサイト・Google Fonts・Google アナリティクスだけ） -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https://www.googletagmanager.com https://*.google-analytics.com; connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; worker-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f6f4ef" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#151918" media="(prefers-color-scheme: dark)">
+  <title>みどりこどもクリニック｜360°バーチャル見学（サンプル）</title>
+  <link rel="icon" href="facilities/midori/logo.svg">
+  <link rel="alternate icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%232f9e83'/%3E%3Cellipse cx='16' cy='16' rx='14' ry='5' fill='none' stroke='%23fff' stroke-width='2'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- 文字（Zen Maru Gothic）は、ページで使う文字だけを js/main.js が後から読み込む -->
+  <link rel="stylesheet" href="css/tour.css">
+  <link rel="modulepreload" href="js/main.js">
+  <link rel="modulepreload" href="js/viewer.js">
+  <link rel="modulepreload" href="js/loader.js">
+  <link rel="modulepreload" href="js/overlay.js">
+  <link rel="modulepreload" href="js/minimap.js">
+  <link rel="modulepreload" href="js/gyro.js">
+  <link rel="modulepreload" href="js/guide.js">
+  <link rel="modulepreload" href="js/analytics.js">
+  <link rel="modulepreload" href="js/ui.js">
+  <link rel="modulepreload" href="js/i18n.js">
+</head>
+<body>
+  <main id="stage">
+    <canvas id="pano" role="img" aria-label="360度の写真。ドラッグで見回せます" data-i18n-label="pano.label"></canvas>
+    <svg id="arrows" aria-label="移動の矢印" data-i18n-label="arrows"></svg>
+    <div id="pins"></div>
+    <div id="exits" aria-label="ほかの行き先" data-i18n-label="exits"></div>
+  </main>
+
+  <div id="hud" hidden>
+    <!-- 施設の看板 -->
+    <header id="topbar" class="glass">
+      <img id="brandLogo" alt="" hidden>
+      <div class="brand-text">
+        <strong id="facilityName"></strong>
+        <span class="sample-badge" id="sampleBadge" title="架空の施設のサンプルです" data-i18n="sample" data-i18n-title="sample.title" hidden>サンプル</span>
+      </div>
+    </header>
+
+    <button id="minimap" class="glass" type="button" aria-label="見取り図を大きく表示" data-i18n-label="map.open"></button>
+
+    <!-- 見え方の操作 -->
+    <div id="controls" class="glass" role="toolbar" aria-label="見え方の操作" data-i18n-label="ctl.label">
+      <button id="btnZoomIn" type="button" aria-label="拡大" data-i18n-label="ctl.zoomIn"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+      <button id="btnZoomOut" type="button" aria-label="縮小" data-i18n-label="ctl.zoomOut"><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>
+      <button id="btnRotate" type="button" aria-label="自動でゆっくり回る" data-i18n-label="ctl.rotate" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg></button>
+      <button id="btnGyro" type="button" aria-label="スマホを傾けて見回す" data-i18n-label="ctl.gyro" aria-pressed="false" hidden><svg viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M3 9c-1 2-1 4 0 6M21 9c1 2 1 4 0 6"/></svg></button>
+      <button id="btnFull" type="button" aria-label="全画面で見る" data-i18n-label="ctl.full" hidden><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+    </div>
+
+    <div id="dock">
+      <!-- 今いる場所と、前後の部屋への移動 -->
+      <div id="stepper" class="glass">
+        <button id="btnPrev" type="button" aria-label="前の部屋へ" data-i18n-label="step.prev"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <button id="placeButton" type="button" aria-label="部屋の一覧を開く" data-i18n-label="step.list">
+          <strong id="placeName"></strong>
+          <span id="placeIndex"></span>
+        </button>
+        <button id="btnNext" type="button" aria-label="次の部屋へ" data-i18n-label="step.next"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+      </div>
+
+      <!-- 自動ガイドの字幕 -->
+      <div id="guideBar" class="glass" hidden aria-live="polite">
+        <div class="guide-progress"><span id="guideProgress"></span></div>
+        <div class="guide-row">
+          <button id="guidePlay" type="button" aria-label="ガイドを一時停止" data-i18n-label="guide.pause">
+            <svg class="i-pause" viewBox="0 0 24 24"><path d="M9 5v14M15 5v14"/></svg>
+            <svg class="i-play" viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z"/></svg>
+          </button>
+          <span id="guideStep"></span>
+          <button id="guidePrev" type="button" aria-label="前の案内へ" data-i18n-label="guide.prev"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button id="guideNext" type="button" aria-label="次の案内へ" data-i18n-label="guide.next"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+          <button id="guideClose" type="button" aria-label="ガイドを終わる" data-i18n-label="guide.close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+        </div>
+        <p id="guideText"></p>
+      </div>
+
+      <nav id="toolbar" class="glass" aria-label="メニュー" data-i18n-label="tb.label">
+        <button id="btnGuide" type="button"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5.5 3.5-5.5 3.5z"/></svg><span data-i18n="tb.guide">ガイド</span></button>
+        <button id="btnRooms" type="button"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span data-i18n="tb.rooms">お部屋</span></button>
+        <button id="btnMap" type="button"><svg viewBox="0 0 24 24"><path d="M9 4 3 6.5v13L9 17l6 2.5 6-2.5v-13L15 6.5 9 4Zm0 0v13m6-10.5v13"/></svg><span data-i18n="tb.map">見取り図</span></button>
+        <button id="btnContact" type="button" class="cta" hidden><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/><path d="M8 9.5h8M8 12.5h5"/></svg><span data-i18n="tb.contact">問い合わせ</span></button>
+        <button id="btnMore" type="button"><svg viewBox="0 0 24 24"><circle cx="5.5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="18.5" cy="12" r="1.2"/></svg><span data-i18n="tb.more">その他</span></button>
+      </nav>
+    </div>
+
+    <div id="hint" class="glass" hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 12h8M8 12l3-3M8 12l3 3M16 12l-3-3M16 12l-3 3"/></svg>
+      <span data-i18n="hint">ドラッグで見回せます・床の矢印で進めます</span>
+    </div>
+  </div>
+
+  <!-- ようこそ画面 -->
+  <section id="intro" hidden>
+    <div class="intro-card">
+      <img id="introLogo" alt="" hidden>
+      <p class="intro-eyebrow"><span data-i18n="intro.eyebrow">360°バーチャル見学</span> <span class="sample-badge" id="introSample" data-i18n="sample" hidden>サンプル</span></p>
+      <h1 id="introName"></h1>
+      <p id="introTagline"></p>
+      <div class="intro-actions">
+        <button id="introGuide" type="button" class="btn-big primary">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg>
+          <span data-i18n="intro.guide">ガイドで見る</span><small id="introGuideTime"></small>
+        </button>
+        <button id="introFree" type="button" class="btn-big" data-i18n="intro.free">自由に見る</button>
+      </div>
+      <p class="intro-note" data-i18n="intro.note">ドラッグ（スマホはスワイプ）で見回し、床の矢印で進めます。</p>
+    </div>
+  </section>
+
+  <div id="loading" aria-live="polite"><span class="spinner"></span><span class="sr" data-i18n="loading">読み込み中</span></div>
+
+  <div id="backdrop" hidden></div>
+  <section id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" hidden>
+    <div id="sheetGrip" class="grip" aria-hidden="true"><span></span></div>
+    <div class="sheet-head">
+      <h2 id="sheetTitle"></h2>
+      <button id="sheetClose" type="button" aria-label="閉じる" data-i18n-label="close">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <div id="sheetBody"></div>
+  </section>
+
+  <section id="chooser" hidden>
+    <div class="chooser-inner">
+      <p class="eyebrow"><span data-i18n="chooser.eyebrow">施設ツアー</span> <span class="sample-badge" data-i18n="sample">サンプル</span></p>
+      <h1 data-i18n="chooser.title">見たい施設をえらんでください</h1>
+      <div id="chooserList"></div>
+      <p class="note" data-i18n="chooser.note">施設名と解説はすべて架空です。写真は仮の素材を使っています。</p>
+    </div>
+  </section>
+
+  <section id="fatal" hidden>
+    <div>
+      <h1 id="fatalTitle"></h1>
+      <p id="fatalDetail"></p>
+    </div>
+  </section>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

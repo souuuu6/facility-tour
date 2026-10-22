@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 940" width="840" height="940">
+  <!-- みどりこどもクリニック（架空）の見取り図。1m = 40。北が上。 -->
+  <style>
+    .room { stroke: #8f9c97; stroke-width: 4; }
+    .gap { stroke: #fbfaf6; stroke-width: 7; }
+    text { font-family: "Hiragino Maru Gothic ProN", "BIZ UDPGothic", "Meiryo", sans-serif; font-weight: 700; fill: #4c5754; text-anchor: middle; }
+    .s { font-size: 16px; } .m { font-size: 21px; } .c { font-size: 13px; fill: #8f9c97; font-weight: 400; }
+  </style>
+  <rect width="840" height="940" fill="#fbfaf6"/>
+  <rect class="room" x="440" y="20" width="280" height="200" fill="#e3f1ee"/>
+  <text class="m" x="580" y="60">診察室1</text>
+  <rect class="room" x="380" y="220" width="144" height="180" fill="#eef4f2"/>
+  <text class="s" x="452" y="276">診察室2</text>
+  <rect class="room" x="620" y="300" width="200" height="220" fill="#fbefe2"/>
+  <text class="m" x="720" y="342">処置室</text><text class="s" x="720" y="366">休養室</text>
+  <rect class="room" x="440" y="400" width="84" height="180" fill="#eef0f2"/>
+  <text class="s" x="482" y="540">トイレ</text>
+  <rect class="room" x="524" y="220" width="96" height="360" fill="#f3f2ec"/>
+  <text class="s" x="560" y="470" transform="rotate(-90 560 470)">ろうか</text>
+  <rect class="room" x="300" y="580" width="320" height="200" fill="#e0f2ea"/>
+  <rect x="400" y="592" width="120" height="32" rx="6" fill="#ffffff" stroke="#b9c6c1" stroke-width="2"/>
+  <text class="m" x="390" y="660">受付</text>
+  <rect class="room" x="20" y="540" width="280" height="280" fill="#f5f0dc"/>
+  <text class="m" x="160" y="620">待合室</text>
+  <rect x="60" y="700" width="200" height="18" rx="9" fill="#e7dfc0"/><rect x="60" y="750" width="200" height="18" rx="9" fill="#e7dfc0"/>
+  <rect class="room" x="360" y="780" width="200" height="140" fill="#f1ece4"/>
+  <text class="m" x="400" y="900">入口</text>
+  <line class="gap" x1="552" y1="220" x2="592" y2="220"/>
+  <line class="gap" x1="524" y1="302" x2="524" y2="338"/>
+  <line class="gap" x1="620" y1="402" x2="620" y2="438"/>
+  <line class="gap" x1="524" y1="462" x2="524" y2="498"/>
+  <line class="gap" x1="528" y1="580" x2="616" y2="580"/>
+  <line class="gap" x1="300" y1="620" x2="300" y2="740"/>
+  <line class="gap" x1="428" y1="780" x2="492" y2="780"/>
+  <line class="gap" x1="428" y1="920" x2="492" y2="920"/>
+  <text class="c" x="140" y="910">見取り図はイメージです</text>
+</svg>

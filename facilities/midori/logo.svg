@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- みどりこどもクリニック（架空）のロゴ -->
+  <rect width="64" height="64" rx="16" fill="#e6f4ef"/>
+  <path d="M32 50c-9-6-15-13-15-21a9 9 0 0 1 15-6.7A9 9 0 0 1 47 29c0 8-6 15-15 21z" fill="#5cbf9f"/>
+  <path d="M32 24v16M24 32h16" stroke="#fff" stroke-width="4.2" stroke-linecap="round"/>
+</svg>

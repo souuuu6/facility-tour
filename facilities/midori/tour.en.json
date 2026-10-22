@@ -1,0 +1,83 @@
+{
+  "name": "Midori Children's Clinic",
+  "tagline": "A pediatric clinic that pays careful attention when your child is “not quite themselves”.",
+  "credit": "Photos are Poly Haven CC0 images (entrance, waiting room, exam room, treatment room) and computer-drawn placeholder rooms (reception, corridor).",
+  "contact": {
+    "title": "Contact & appointments",
+    "reserve": { "label": "Book an appointment", "note": "Online booking is available 24 hours a day" },
+    "hours": "during clinic hours",
+    "address": "(sample address)"
+  },
+  "info": {
+    "title": "First visit",
+    "hours": [["Mon, Tue, Thu, Fri", "9:00–12:00 / 15:00–18:00"], ["Sat", "9:00–12:00"]],
+    "closed": "Wednesdays, Sundays and national holidays",
+    "bring": ["Health insurance card (or My Number insurance card)", "Medical subsidy certificate (if you have one)", "Maternal and child health handbook", "Medicine notebook (if you have one)"],
+    "steps": ["Book online or by phone", "Fill in the questionnaire at reception", "Examination", "Payment and explanation of medicine"],
+    "note": "If your child has a fever or a cough, please call us before coming.",
+    "updated": "October 2026"
+  },
+  "guide": [
+    "Welcome to Midori Children's Clinic. Let us show you around, starting from the entrance.",
+    "Next to the entrance there is space to leave strollers.",
+    "This is reception. On your first visit, please show your health insurance card and, if you have them, your medical subsidy certificate and maternal and child health handbook.",
+    "This is the waiting room. You can wait with your stroller.",
+    "If your child has a fever or a cough, please call us before coming.",
+    "The exam rooms are down the corridor behind reception.",
+    "This is an exam room. Parents stay with their child during the examination.",
+    "This is the treatment and rest room. Children can lie down here, for example during a drip.",
+    "Thank you for visiting. For appointments and questions, tap “Contact”."
+  ],
+  "nodes": {
+    "entrance": {
+      "name": "Entrance", "room": "Entrance",
+      "pins": [
+        { "title": "Front door", "text": "The entrance has no steps, so you can come in with a stroller." },
+        { "title": "Stroller parking", "text": "There is space to leave strollers next to the entrance." }
+      ]
+    },
+    "reception": {
+      "name": "Reception", "room": "Reception",
+      "pins": [
+        { "title": "Reception", "text": "On your first visit, please show your health insurance card and, if you have them, your medical subsidy certificate and maternal and child health handbook. We will give you a questionnaire here." }
+      ]
+    },
+    "waiting": {
+      "name": "Waiting room", "room": "Waiting room",
+      "pins": [
+        { "title": "Spacious waiting area", "text": "The aisles are wide so you can wait with your stroller." },
+        { "title": "If your child has a fever", "text": "If your child has a fever or a cough, please call us before coming. We may guide you to a separate room." },
+        { "title": "Call display", "text": "When your turn is near, your number is shown on the screen." }
+      ]
+    },
+    "hall1": {
+      "name": "Corridor (reception side)",
+      "pins": [
+        { "title": "Toilet", "text": "There is a diaper-changing table and a child seat." }
+      ]
+    },
+    "hall2": { "name": "Corridor (middle)" },
+    "hall3": {
+      "name": "Corridor (exam room side)",
+      "pins": [
+        { "title": "Exam room 2", "text": "On busy days, we also see patients in this room." }
+      ]
+    },
+    "exam1": {
+      "name": "Exam room 1", "room": "Exam room",
+      "pins": [
+        { "title": "Examination bed", "text": "Parents stay with their child during the examination. If your child feels anxious, ask us about being examined on your lap." },
+        { "title": "Medical equipment", "text": "This equipment is used for treatments such as inhalation. We explain to your child what we are going to do before using it." },
+        { "title": "Monitor", "text": "We explain test results and images while looking at them together with you." }
+      ]
+    },
+    "rest": {
+      "name": "Treatment & rest room", "room": "Treatment & rest room",
+      "pins": [
+        { "title": "Rest beds", "text": "Children can lie down here during a drip or when they feel unwell. A parent can stay with them." },
+        { "title": "Soft mats", "text": "Soft mats cover the floor so small children can play on it." },
+        { "title": "Wall pictures", "text": "Pictures in gentle colors hang on the walls to help children feel at ease." }
+      ]
+    }
+  }
+}

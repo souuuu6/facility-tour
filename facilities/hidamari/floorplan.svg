@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 840" width="680" height="840">
+  <!-- ひだまり保育園（架空）の見取り図。1m = 40。北が上。 -->
+  <style>
+    .room { stroke: #8f9c97; stroke-width: 4; }
+    .gap { stroke: #fbfaf6; stroke-width: 7; }
+    text { font-family: "Hiragino Maru Gothic ProN", "BIZ UDPGothic", "Meiryo", sans-serif; font-weight: 700; fill: #4c5754; text-anchor: middle; }
+    .s { font-size: 17px; } .m { font-size: 21px; } .c { font-size: 13px; fill: #8f9c97; font-weight: 400; }
+  </style>
+  <rect width="680" height="840" fill="#fbfaf6"/>
+  <rect class="room" x="40" y="40" width="576" height="280" rx="18" fill="#dcefd2"/>
+  <circle cx="120" cy="120" r="34" fill="#c5e3b8"/><circle cx="560" cy="100" r="26" fill="#c5e3b8"/>
+  <rect x="150" y="190" width="80" height="50" rx="8" fill="#f3e2b8"/>
+  <text class="m" x="328" y="110">えんてい（園庭）</text>
+  <rect class="room" x="40" y="320" width="240" height="200" fill="#fdf3cf"/>
+  <text class="m" x="160" y="362">1〜2歳児室</text>
+  <rect class="room" x="40" y="520" width="240" height="120" fill="#e7f0fb"/>
+  <text class="m" x="160" y="552">給食室</text>
+  <rect class="room" x="280" y="320" width="96" height="320" fill="#f3efe6"/>
+  <text class="s" x="318" y="500" transform="rotate(-90 318 500)">ろうか</text>
+  <rect class="room" x="376" y="320" width="164" height="140" fill="#eef0f2"/>
+  <text class="s" x="458" y="396">トイレ</text>
+  <rect class="room" x="376" y="460" width="240" height="180" fill="#fde9d9"/>
+  <text class="m" x="496" y="506">0歳児室</text>
+  <rect class="room" x="240" y="640" width="176" height="160" fill="#f6e7f0"/>
+  <text class="m" x="328" y="684">玄関</text>
+  <line class="gap" x1="280" y1="566" x2="280" y2="602"/>
+  <line class="gap" x1="280" y1="406" x2="280" y2="442"/>
+  <line class="gap" x1="376" y1="518" x2="376" y2="554"/>
+  <line class="gap" x1="376" y1="366" x2="376" y2="402"/>
+  <line class="gap" x1="300" y1="320" x2="356" y2="320"/>
+  <line class="gap" x1="284" y1="640" x2="372" y2="640"/>
+  <line class="gap" x1="240" y1="696" x2="240" y2="744"/>
+  <text class="c" x="206" y="724">出入口</text>
+  <text class="c" x="560" y="826">見取り図はイメージです</text>
+</svg>
