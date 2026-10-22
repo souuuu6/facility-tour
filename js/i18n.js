@@ -23,6 +23,10 @@ const DICT = {
     'guide.pause': 'ガイドを一時停止',
     'guide.resume': 'ガイドを再開',
     'guide.close': 'ガイドを終わる',
+    'guide.voice': 'ガイドを声で読み上げる',
+    'guide.pick': 'どのガイドで見ますか',
+    'guide.stops': '{n}か所・約{m}分',
+    'next': '次はこちら',
     'tb.label': 'メニュー',
     'tb.guide': 'ガイド',
     'tb.guiding': 'ガイド中',
@@ -135,6 +139,10 @@ const DICT = {
     'guide.pause': 'Pause the guide',
     'guide.resume': 'Resume the guide',
     'guide.close': 'End the guide',
+    'guide.voice': 'Read the guide aloud',
+    'guide.pick': 'Choose a guide',
+    'guide.stops': '{n} stops · about {m} min',
+    'next': 'Next',
     'tb.label': 'Menu',
     'tb.guide': 'Guide',
     'tb.guiding': 'Guiding',
@@ -264,7 +272,14 @@ export function localize(tour, tr) {
     if (c.reserve && out.contact.reserve) Object.assign(out.contact.reserve, c.reserve);
   }
   if (tr.info) out.info = { ...out.info, ...tr.info };
-  if (Array.isArray(tr.guide) && out.guide) tr.guide.forEach((text, i) => { if (text && out.guide[i]) out.guide[i].text = text; });
+  const trGuides = tr.guides || (Array.isArray(tr.guide) ? [{ steps: tr.guide }] : []);
+  trGuides.forEach((g, gi) => {
+    const o = out.guides?.[gi];
+    if (!o || !g) return;
+    if (g.title) o.title = g.title;
+    if (g.desc) o.desc = g.desc;
+    (g.steps || []).forEach((text, i) => { if (text && o.steps?.[i]) o.steps[i].text = text; });
+  });
   for (const n of out.nodes || []) {
     const x = tr.nodes?.[n.id];
     if (!x) continue;

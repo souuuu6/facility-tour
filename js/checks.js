@@ -53,8 +53,11 @@ export async function runChecks(tour, loader) {
     for (const n of nodes) if (!reach.has(n.id)) add('warn', '最初の地点から矢印をたどって行けません（一覧や見取り図からは行けます）。', name(n));
   }
 
-  for (const [i, s] of (tour.guide || []).entries()) {
-    if (!ids.has(s.node)) add('error', `ガイドの ${i + 1} 番目の地点「${s.node}」がありません。`);
+  for (const g of tour.guides || []) {
+    for (const [i, s] of (g.steps || []).entries()) {
+      if (!ids.has(s.node)) add('error', `ガイド「${g.title || ''}」の ${i + 1} 番目の地点「${s.node}」がありません。`);
+    }
+    if ((tour.guides || []).length > 1 && !g.title) add('warn', 'ガイドが 2 本以上あるのに、名前のないガイドがあります。');
   }
 
   if (!tour.sample) {
@@ -70,7 +73,10 @@ export async function runChecks(tour, loader) {
     texts.push([name(n), n.name], [name(n), n.room]);
     for (const p of n.pins) texts.push([`${name(n)}・${p.title || 'ピン'}`, `${p.title || ''} ${p.text || ''}`]);
   }
-  for (const s of tour.guide || []) texts.push([`ガイド「${(s.text || '').slice(0, 12)}…」`, s.text]);
+  for (const g of tour.guides || []) {
+    texts.push([`ガイド「${g.title || ''}」`, `${g.title || ''} ${g.desc || ''}`]);
+    for (const s of g.steps || []) texts.push([`ガイド「${(s.text || '').slice(0, 12)}…」`, s.text]);
+  }
   const info = tour.info || {};
   texts.push(['はじめての方へ', [info.note, info.closed, ...(info.steps || []), ...(info.bring || [])].join(' ')]);
   if (info.hours?.length && !info.updated) add('warn', '「はじめての方へ」に、いつ時点の情報かが入っていません。');

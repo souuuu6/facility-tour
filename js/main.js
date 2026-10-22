@@ -93,6 +93,8 @@ async function main() {
     onMoved: () => app.editor?.changed(),
     safeBottom,
     exits: $('#exits'),
+    thumbFor,
+    suggestTo,
   });
   app.mini = new Minimap($('#minimap'), { full: false, loader: app.loader });
   app.gyro = new Gyro(app.viewer);
@@ -119,7 +121,7 @@ async function main() {
   if (app.editing) {
     const { Editor } = await import('./editor.js');
     app.editor = new Editor(app, { goTo, refresh, showMap, walkTo });
-    app.tour = app.editor.loadDraft(app.tour);
+    app.tour = normalize(app.editor.loadDraft(app.tour));
   } else {
     initAnalytics(app.tour);
   }
@@ -134,7 +136,7 @@ async function main() {
   if (startId) {
     const yaw = params.get('yaw');
     await goTo(startId, { initial: true, yaw: yaw != null && !isNaN(+yaw) ? +yaw : null });
-    $('#introGuide').disabled = $('#introFree').disabled = false;
+    for (const b of document.querySelectorAll('#intro button')) b.disabled = false;
     if (intro) {
       if (document.body.classList.contains('intro') && !app.viewer.reduced) app.viewer.autoRotate = ROTATE_SPEED; // ようこそ画面の後ろでゆっくり回す
     } else if (!app.editing) {
@@ -167,6 +169,9 @@ function applyPrefs() {
 
 // 足りない値を補う（手で書いた JSON でも動くように）
 function normalize(tr) {
+  if (!Array.isArray(tr.guides)) tr.guides = Array.isArray(tr.guide) && tr.guide.length ? [{ id: 'tour', steps: tr.guide }] : [];
+  delete tr.guide;
+  for (const g of tr.guides) g.steps = Array.isArray(g.steps) ? g.steps : [];
   tr.nodes = Array.isArray(tr.nodes) ? tr.nodes : [];
   for (const n of tr.nodes) {
     n.links = Array.isArray(n.links) ? n.links : [];
@@ -214,6 +219,29 @@ function readableOn(hex) {
   return `#${[r, g, b].map((c) => c.toString(16).padStart(2, '0')).join('')}`;
 }
 
+// 矢印の行き先の小さな写真：行き先に着いたとき正面に見える方向あたり
+function thumbFor(link) {
+  const dest = app.byId(link.to);
+  const src = dest?.preview || dest?.image;
+  if (!src || !app.node) return null;
+  const destYaw = wrapDeg(link.yaw + (app.node.heading || 0) - (dest.heading || 0));
+  return { url: app.loader.url(src), x: destYaw / 360 + 0.5 };
+}
+
+// おすすめの矢印：ガイド中は次の案内の場所、自由に見ているときは次の部屋へ向かう道の 1 歩目
+function suggestTo() {
+  if (!app.node) return null;
+  let target = null;
+  if (app.guide?.active) {
+    const s = app.guide.current();
+    target = s && s.node !== app.node.id ? s.node : app.guide.steps()[app.guide.i + 1]?.node;
+  } else {
+    target = neighborsInOrder().next?.id;
+  }
+  if (!target || target === app.node.id) return null;
+  return route(app.node.id, target)?.[0]?.to || null;
+}
+
 function nodeLabel(id) {
   const n = app.byId(id);
   return n ? n.room || n.name || n.id : id;
@@ -254,7 +282,8 @@ export async function goTo(id, { link = null, initial = false, yaw = null } = {}
     const startYaw = yaw ?? node.startYaw;
     if (initial || !app.node) {
       v.setImage(img, heading);
-      v.lookAt(startYaw != null ? startYaw + heading : 0, -6);
+      // 横長の画面は縦の視野がせまいので、少し下を向いて床の矢印が画面の中ほどに来るようにする
+      v.lookAt(startYaw != null ? startYaw + heading : 0, v.cw > v.ch ? -12 : -6);
     } else if (link) {
       await v.transition(img, heading, { lookYaw: link.yaw + (app.node.heading || 0) });
     } else {
@@ -412,7 +441,7 @@ function bindControls() {
 
   $('#btnGuide').addEventListener('click', () => {
     if (app.guide.active) app.guide.stop();
-    else { setRotate(false); app.guide.start(); }
+    else pickGuide((gi) => { setRotate(false); app.guide.start(0, gi); });
   });
   $('#btnRooms').addEventListener('click', showRooms);
   $('#btnMap').addEventListener('click', () => showMap());
@@ -426,7 +455,20 @@ function setRotate(on) {
   $('#btnRotate').setAttribute('aria-pressed', String(on));
 }
 
+// ガイドが 2 本以上あれば一覧からえらぶ。1 本ならそのまま始める
+function pickGuide(onPick) {
+  const list = app.guide.list();
+  if (list.length < 2) { if (list.length) onPick(0); return; }
+  const body = h('div', { class: 'menu' }, list.map((g, gi) => h('button', {
+    type: 'button',
+    class: 'menu-item',
+    onclick: () => { closeSheet(); onPick(gi); },
+  }, h('strong', {}, g.title || t('tb.guide')), h('small', {}, [g.desc, t('guide.stops', { n: g.steps.length, m: app.guide.minutes(g) })].filter(Boolean).join('　')))));
+  openSheet({ title: t('guide.pick'), body });
+}
+
 function guideState(active, finished) {
+  app.overlay.suggest();
   $('#stepper').hidden = active;
   $('#btnGuide').classList.toggle('on', active);
   $('#btnGuide').querySelector('span').textContent = t(active ? 'tb.guiding' : 'tb.guide');
@@ -447,24 +489,35 @@ function showIntro() {
   $('#introTagline').hidden = !tr.tagline;
   $('#introSample').hidden = !tr.sample;
   if (tr.logo) { $('#introLogo').src = app.loader.url(tr.logo); $('#introLogo').hidden = false; }
-  const steps = app.guide.steps();
-  const sec = steps.reduce((s, x) => s + app.guide.duration(x) / 1000 + 2.5, 0);
-  $('#introGuideTime').textContent = steps.length ? t('intro.min', { n: Math.max(1, Math.round(sec / 60)) }) : '';
-  $('#introGuide').hidden = !steps.length;
+  const guides = app.guide.list();
+  $('#introGuide').hidden = !guides.length;
+  if (guides.length) {
+    if (guides.length > 1 && guides[0].title) $('#introGuide [data-i18n]').textContent = guides[0].title;
+    $('#introGuideTime').textContent = t('intro.min', { n: app.guide.minutes(guides[0]) });
+  }
+  // 2 本目からのガイドは、ひかえめなボタンで並べる
+  $('#introMore').replaceChildren(...guides.slice(1).map((g, k) => h('button', {
+    type: 'button',
+    class: 'btn-big sub',
+    onclick: () => begin(true, k + 1),
+  }, g.title || t('intro.guide'), h('small', {}, t('intro.min', { n: app.guide.minutes(g) })))));
   $('#intro').hidden = false;
-  $('#introGuide').disabled = $('#introFree').disabled = true; // 最初の写真が出るまで待つ
+  for (const b of document.querySelectorAll('#intro button')) b.disabled = true; // 最初の写真が出るまで待つ
   document.body.classList.add('intro');
-  const begin = (guide) => {
+  let begun = false;
+  const begin = (guide, gi = 0) => {
+    if (begun) return;
+    begun = true;
     document.body.classList.remove('intro');
     $('#intro').classList.add('leaving');
     setTimeout(() => { $('#intro').hidden = true; }, 350);
     $('#hud').hidden = false;
     setRotate(false);
     track('tour_start', { from: guide ? 'intro_guide' : 'intro_free', src: app.src, lang: getLang() });
-    if (guide) app.guide.start();
+    if (guide) app.guide.start(0, gi);
     else showHint();
   };
-  $('#introGuide').addEventListener('click', () => begin(true), { once: true });
+  $('#introGuide').addEventListener('click', () => begin(true, 0), { once: true });
   $('#introFree').addEventListener('click', () => begin(false), { once: true });
 }
 

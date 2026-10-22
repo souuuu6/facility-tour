@@ -205,7 +205,7 @@ export class Editor {
   json() {
     // 編集パネルが用意しただけの空の枠は書き出さない
     const empty = (v) => v && typeof v === 'object' && (Array.isArray(v) ? v.length === 0 : Object.keys(v).length === 0);
-    const skip = new Set(['contact', 'reserve', 'analytics', 'guide']);
+    const skip = new Set(['contact', 'reserve', 'analytics', 'guides']);
     const out = JSON.stringify(this.app.tour, (k, v) => {
       if (!skip.has(k) || !v || typeof v !== 'object') return v;
       if (!Array.isArray(v)) v = Object.fromEntries(Object.entries(v).filter(([, x]) => x !== '' && !empty(x)));
@@ -283,7 +283,7 @@ export class Editor {
       data.text = text.value.trim();
       const sec = parseFloat(ms.value);
       if (sec > 0) data.ms = Math.round(sec * 1000); else delete data.ms;
-      if (!step) app.tour.guide.push(data);
+      if (!step) this.editGuide().steps.push(data);
       closeSheet();
       this.changed();
     };
@@ -297,16 +297,25 @@ export class Editor {
           step.look = [r1(wrapDeg(app.viewer.yaw - app.node.heading)), r1(app.viewer.pitch)];
           toast('今の向きにしました');
         } }, '向きを今の向きにする') : null,
-        step ? h('button', { type: 'button', class: 'btn danger', onclick: () => { app.tour.guide.splice(app.tour.guide.indexOf(step), 1); closeSheet(); this.changed(); } }, '消す') : null,
+        step ? h('button', { type: 'button', class: 'btn danger', onclick: () => { const st = this.editGuide().steps; st.splice(st.indexOf(step), 1); closeSheet(); this.changed(); } }, '消す') : null,
         h('button', { type: 'submit', class: 'btn primary' }, step ? '保存' : '追加')));
     openSheet({ title: step ? '案内を直す' : '案内を追加', body });
     setTimeout(() => text.focus(), 50);
   }
 
+  // 編集しているガイド（なければ 1 本目を作る）
+  editGuide() {
+    const t = this.app.tour;
+    t.guides ||= [];
+    if (!t.guides.length) t.guides.push({ id: 'tour', title: 'ひとめぐり', steps: [] });
+    this.gi = Math.min(this.gi || 0, t.guides.length - 1);
+    return t.guides[this.gi];
+  }
+
   tryGuide(i) {
     this.tool = 'view';
     this.render();
-    this.app.guide.start(i);
+    this.app.guide.start(i, this.gi || 0);
   }
 
   // ---- 公開前チェック ----
@@ -354,7 +363,7 @@ export class Editor {
     if (!confirm(`地点「${label(node)}」を消します。ここへ向かう矢印も消えます。よろしいですか？`)) return;
     app.tour.nodes = app.tour.nodes.filter((n) => n !== node);
     for (const n of app.tour.nodes) n.links = n.links.filter((l) => l.to !== node.id);
-    if (app.tour.guide) app.tour.guide = app.tour.guide.filter((s) => s.node !== node.id);
+    for (const g of app.tour.guides || []) g.steps = g.steps.filter((s) => s.node !== node.id);
     if (app.tour.start === node.id) app.tour.start = app.tour.nodes[0]?.id;
     const next = app.tour.nodes[0];
     app.node = null;
@@ -459,9 +468,18 @@ export class Editor {
       text('いつ時点の情報か', () => info.updated, (v) => setInfo('updated', v), '例：2026年10月'),
       h('p', { class: 'muted small' }, '入れた項目は「問い合わせ」と「その他」に出ます。古くならないよう、見直す時期を施設の方と決めておきます。')));
 
-    t.guide ||= [];
-    const steps = t.guide;
-    sections.push(h('section', {}, h('h3', {}, `自動ガイド（${steps.length}）`),
+    // 自動ガイド：何本でも作れる（例：「園内をひとめぐり」「一日の流れ」）。編集するガイドをえらんで、案内を足していく
+    t.guides ||= [];
+    const g = this.editGuide();
+    const steps = g.steps;
+    const gi = t.guides.indexOf(g);
+    sections.push(h('section', {}, h('h3', {}, `自動ガイド（${t.guides.length} 本）`),
+      h('div', { class: 'row' },
+        h('select', { 'aria-label': '編集するガイド', onchange: (e) => { this.gi = +e.target.value; this.render(); } },
+          t.guides.map((x, k) => h('option', { value: k, selected: k === gi }, `${x.title || `ガイド${k + 1}`}（${x.steps.length}）`))),
+        h('button', { type: 'button', class: 'btn tiny', onclick: () => { t.guides.push({ id: `g${Date.now().toString(36)}`, title: `ガイド${t.guides.length + 1}`, steps: [] }); this.gi = t.guides.length - 1; this.changed({ refresh: true }); } }, 'ガイドを増やす')),
+      text('ガイドの名前（ようこそ画面とガイドの一覧に出る）', () => g.title, (v) => { g.title = v; }, '例：一日の流れ'),
+      text('ひとこと説明（ガイドの一覧に出る）', () => g.desc, (v) => { if (v) g.desc = v; else delete g.desc; }, '例：登園からお迎えまでをたどります'),
       steps.length ? h('ol', { class: 'items guide-steps' }, steps.map((st, i) => h('li', {},
         h('button', { type: 'button', class: 'link', onclick: () => this.tryGuide(i) }, `${label(app.byId(st.node) || { id: st.node })}：${(st.text || '').slice(0, 18)}${(st.text || '').length > 18 ? '…' : ''}`),
         h('button', { type: 'button', class: 'btn tiny', 'aria-label': '上へ', disabled: i === 0, onclick: () => this.move(steps, i, -1) }, '↑'),
@@ -471,7 +489,11 @@ export class Editor {
       h('div', { class: 'row' },
         h('button', { type: 'button', class: 'btn', disabled: !node, onclick: () => this.stepForm(null) }, '今の地点・向きを案内に追加'),
         steps.length ? h('button', { type: 'button', class: 'btn', onclick: () => this.tryGuide(0) }, '最初から試す') : null),
-      h('p', { class: 'muted small' }, '案内したい方向を向いてから追加します。地点が離れていても、矢印をたどって歩いて移動します。')));
+      h('p', { class: 'muted small' }, '案内したい方向を向いてから追加します。地点が離れていても、矢印をたどって歩いて移動します。'),
+      t.guides.length > 1 ? h('button', { type: 'button', class: 'btn danger ghost', onclick: () => {
+        if (!confirm(`ガイド「${g.title || ''}」を消します。よろしいですか？`)) return;
+        t.guides.splice(gi, 1); this.gi = 0; this.changed({ refresh: true });
+      } }, 'このガイドを消す') : null));
 
     sections.push(h('section', {}, h('h3', {}, '施設'),
       field('施設名', h('input', { type: 'text', value: t.name || '', onchange: (e) => { t.name = e.target.value.trim(); this.changed({ refresh: true, render: false }); } })),

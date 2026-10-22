@@ -25,9 +25,17 @@ export class Overlay {
     this.viewer = viewer;
     this.svg = svg;
     this.layer = layer;
-    this.h = h; // { onLink, onPin, isEditing, onEdit(kind, item), onMoved(), safeBottom(), exits }
+    this.h = h; // { onLink, onPin, isEditing, onEdit(kind, item), onMoved(), safeBottom(), exits, thumbFor(link), suggestTo() }
     this.items = [];
-    this.exits = h.exits; // 画面に入っていない行き先のボタンを並べる場所
+    this.exits = h.exits; // 画面に入っていない行き先のボタンを並べる場所（足もと：下の列）
+    // 左右の行き先は、画面の左右の端に縦に並べる（下の列に置くと正面の矢印にかぶるため）
+    this.sides = {};
+    if (this.exits) for (const k of ['left', 'right']) {
+      const e = document.createElement('div');
+      e.className = `exits-side exits-${k}`;
+      this.exits.after(e);
+      this.sides[k] = e;
+    }
     viewer.on('change', () => this.update());
   }
 
@@ -36,9 +44,18 @@ export class Overlay {
     this.svg.replaceChildren();
     this.layer.replaceChildren();
     this.exits?.replaceChildren();
+    for (const e of Object.values(this.sides)) e.replaceChildren();
     this.items = [];
+    // 矢印にマウスを乗せたときに出す、行き先の写真のカード
+    this.card = document.createElement('div');
+    this.card.className = 'arrow-card';
+    this.card.hidden = true;
+    this.card.append(document.createElement('span'), document.createElement('strong'));
+    this.card.firstChild.className = 'arrow-card-img';
+    this.layer.append(this.card);
     for (const link of node.links || []) this._addLink(link, nodeName(link.to));
     for (const pin of node.pins || []) this._addPin(pin);
+    this.suggest();
     this.update();
   }
 
@@ -54,17 +71,34 @@ export class Overlay {
     chev.setAttribute('class', 'chev');
     g.append(disc, chev);
     this.svg.append(g);
+    const thumb = this.h.thumbFor?.(link);
     const tag = document.createElement('div');
     tag.className = 'arrow-label';
-    tag.textContent = label;
+    tag.append(makeThumb(thumb, 24), textSpan(label));
     this.layer.append(tag);
     const chip = document.createElement('button');
     chip.type = 'button';
     chip.className = 'exit-chip';
+    const chipText = textSpan('');
+    chip.append(makeThumb(thumb, 22), chipText);
     chip.addEventListener('click', () => this.h.onLink(link));
     this.exits?.append(chip);
-    const item = { kind: 'link', data: link, el: g, disc, chev, tag, chip, label };
+    const item = { kind: 'link', data: link, el: g, disc, chev, tag, chip, chipText, label, thumb };
     this._wire(item, g, () => this.h.onLink(link));
+    // マウスを乗せる・キーボードで選ぶと、行き先の写真を大きめに見せる
+    const showCard = () => {
+      if (!thumb || this.h.isEditing()) return;
+      setThumb(this.card.firstChild, thumb, 200, 112);
+      this.card.lastChild.textContent = label;
+      this.card.hidden = false;
+      this.cardFor = item;
+      this.update();
+    };
+    const hideCard = () => { if (this.cardFor === item) { this.card.hidden = true; this.cardFor = null; } };
+    g.addEventListener('mouseenter', showCard);
+    g.addEventListener('mouseleave', hideCard);
+    g.addEventListener('focus', showCard);
+    g.addEventListener('blur', hideCard);
     g.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') this.h.onLink(link); });
     this.items.push(item);
   }
@@ -123,8 +157,12 @@ export class Overlay {
     const v = this.viewer;
     const head = this.node.heading || 0;
     // ここより下は下の操作（と、その上の行き先ボタンの列）に隠れる
+    // 矢印は下の操作（ドック）だけを基準にする。行き先ボタンの列を基準にすると、
+    // 「矢印が隠れる → ボタンが出る → 列が場所を取る → さらに隠れる」の堂々めぐりになるため。
+    // ピンと矢印の名前は、行き先ボタンの列とも重ならないようにする
+    const dock = Math.min(v.ch, this.h.safeBottom?.() ?? v.ch);
     const exitsH = this.exits && !this.exits.hidden ? this.exits.offsetHeight : 0;
-    const safe = Math.min(v.ch, this.h.safeBottom?.() ?? v.ch) - (exitsH ? exitsH + 8 : 0);
+    const safe = dock - (exitsH ? exitsH + 8 : 0);
     for (const it of this.items) {
       const wy = (it.data.yaw || 0) + head;
       if (it.kind === 'pin') {
@@ -157,7 +195,7 @@ export class Overlay {
       const disc = toScreen(DISC);
       const chev = disc && toScreen(CHEVRON);
       const c0 = v.project(center);
-      const show = !!(disc && chev && c0 && c0.x > 24 && c0.x < v.cw - 24 && c0.y > 0 && c0.y < safe - 28);
+      const show = !!(disc && chev && c0 && c0.x > 24 && c0.x < v.cw - 24 && c0.y > 0 && c0.y < dock - 28);
       it.el.style.display = show ? '' : 'none';
       it.tag.style.visibility = show ? 'visible' : 'hidden';
       // 見えていない行き先は、下の操作の上にボタンで出す（← 左／→ 右／↓ 足もと）
@@ -166,8 +204,9 @@ export class Overlay {
         if (!show) {
           const d = wrapDeg(wy - v.yaw);
           const below = Math.abs(d) < v.hfov() / 2;
-          it.chip.textContent = below ? `↓ ${it.label}` : d < 0 ? `← ${it.label}` : `${it.label} →`;
-          it.chip.style.order = below ? 1 : d < 0 ? 0 : 2;
+          it.chipText.textContent = below ? `↓ ${it.label}` : d < 0 ? `← ${it.label}` : `${it.label} →`;
+          const box = below ? this.exits : this.sides[d < 0 ? 'left' : 'right'];
+          if (box && it.chip.parentNode !== box) box.append(it.chip);
         }
       }
       if (!show) continue;
@@ -177,8 +216,49 @@ export class Overlay {
       const ty = Math.max(below.y, c0.y) + 6;
       it.tag.style.visibility = ty < safe - 24 ? 'visible' : 'hidden';
       it.tag.style.transform = `translate(${below.x}px, ${ty}px) translateX(-50%)`;
+      if (this.cardFor === it) this.card.style.transform = `translate(${c0.x}px, ${Math.min(...disc.split(' ').map((q) => +q.split(',')[1])) - 10}px) translate(-50%, -100%)`;
     }
   }
+
+  // おすすめの矢印（次の部屋への道）を光らせる
+  suggest() {
+    const to = this.h.isEditing?.() ? null : this.h.suggestTo?.();
+    for (const it of this.items) {
+      if (it.kind !== 'link') continue;
+      const on = !!to && it.data.to === to;
+      it.el.classList.toggle('suggest', on);
+      it.tag.classList.toggle('suggest', on);
+      it.chip.classList.toggle('suggest', on);
+    }
+  }
+}
+
+function textSpan(s) {
+  const e = document.createElement('span');
+  e.textContent = s;
+  return e;
+}
+
+// 行き先の 360 度写真（下見用）の、着いたときに見える方向あたりを丸く切り抜いて見せる
+function makeThumb(thumb, size) {
+  const e = document.createElement('span');
+  e.className = 'arrow-thumb';
+  if (thumb) setThumb(e, thumb, size, size);
+  else e.hidden = true;
+  return e;
+}
+
+function setThumb(e, { url, x }, w, h) {
+  // 横に 60 度ぶん見えるように拡大し、行き先で正面になる方向を真ん中に置く
+  const scale = 6; // 360 / 60
+  const iw = w * scale;
+  const ih = iw / 2;
+  const left = Math.max(0, Math.min(iw - w, x * iw - w / 2));
+  e.style.width = `${w}px`;
+  e.style.height = `${h}px`;
+  e.style.backgroundImage = `url("${url}")`;
+  e.style.backgroundSize = `${iw}px ${ih}px`;
+  e.style.backgroundPosition = `${-left}px ${-(ih - h) / 2}px`;
 }
 
 function round1(x) { return Math.round(x * 10) / 10; }
